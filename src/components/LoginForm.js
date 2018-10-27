@@ -18,15 +18,28 @@ class LoginFrom extends Component {
 
     try {
       await firebase.auth().signInWithEmailAndPassword(email, password);
-      this.setState({ loading: false });
+      this.onLoginSuccess();
     } catch (e) {
       try {
         await firebase.auth().createUserWithEmailAndPassword(email, password);
-        this.setState({ loading: false });
+        this.onLoginSuccess();
       } catch (error) {
-        this.setState({ error: 'Authentication failed', loading: false });
+        this.onLoginFail();
       }
     }
+  }
+  
+  onLoginFail() {
+    this.setState({ error: 'Authentication failed', loading: false });
+  }
+  
+  onLoginSuccess() {
+    this.setState({ 
+      email: '',
+      password: '',
+      loading: false,
+      error: ''
+     });
   }
 
   renderButton() {
